@@ -30,6 +30,7 @@ namespace MinMax.Scripts {
                 if (_isBlackTurn) {
                     _blackAI.Think();
                     _blackAI.Act();
+                    _isBlackTurn = false;
                     UpdatePhysicalBoard();
                 }
                 else {

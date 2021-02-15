@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MinMax.Scripts {
@@ -46,8 +47,7 @@ namespace MinMax.Scripts {
             // Normal Eat move
             int xDistance = CurrentCoordinate.X - destination.X;
             int yDistance = CurrentCoordinate.Y - destination.Y;
-            if (Mathf.Abs(xDistance) == 2 && Mathf.Abs(yDistance) == 2 && 
-                board.Matrix[CurrentCoordinate.X + Mathf.Abs(xDistance) / 2, CurrentCoordinate.Y + Mathf.Abs(yDistance) / 2] != null) { 
+            if (Mathf.Abs(xDistance) == 2 && Mathf.Abs(yDistance) == 2) {
                 return 1;
             }
             return 0;
@@ -57,6 +57,14 @@ namespace MinMax.Scripts {
             // Move to position
             board.Matrix[destination.X, destination.Y] = board.Matrix[CurrentCoordinate.X, CurrentCoordinate.Y];
             board.Matrix[CurrentCoordinate.X, CurrentCoordinate.Y] = null;
+            // Remove all checkers between the 2 positions
+            int xSign = Math.Sign(destination.X - CurrentCoordinate.X);
+            int ySign = Math.Sign(destination.Y - CurrentCoordinate.Y);
+            for (int i = CurrentCoordinate.X; i != destination.X; i += xSign) {
+                for (int j = CurrentCoordinate.Y; j != destination.Y; j += ySign) {
+                    board.Matrix[i, j] = null;
+                }
+            }
             CurrentCoordinate = destination;
         }
 

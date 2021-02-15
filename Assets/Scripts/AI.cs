@@ -21,7 +21,7 @@ namespace MinMax.Scripts {
             _minMaxResults.Clear();
             foreach (Piece piece in Board.AvailablePieces(PlayerColor)) {
                 foreach (Coordinate availableMove in piece.AvailableMoves(Board)) {
-                    Debug.Log("NEW EVALUATION------------");
+                    Debug.Log("NEW EVALUATION FOR " + piece.CurrentCoordinate + " TO " + availableMove);
                     Node node = new Node(Board, PlayerColor, piece.CurrentCoordinate, availableMove);
                     int result = MinMax(node, Depth, true);
                     _minMaxResults.Add(node, result);
@@ -37,7 +37,6 @@ namespace MinMax.Scripts {
         }
         
         private int MinMax(Node node, int depth, bool isMax) {
-            Debug.Log("Actual depth : " + depth);
             if (depth == 0 && node.IsTerminal) {
                 Debug.Log("END OF BRANCH------");
                 return node.HeuristicValue;
