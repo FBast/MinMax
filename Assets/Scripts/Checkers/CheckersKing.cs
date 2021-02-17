@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace MinMax.Scripts {
-    public class King : Piece {
+namespace Checkers {
+    public class CheckersKing : Piece {
         
-        public King(PlayerColor owner, Coordinate currentCoordinate) : base(owner, currentCoordinate) { }
+        public CheckersKing(PlayerColor player, Coordinate currentCoordinate) : base(player, currentCoordinate) { }
+
+        public override int Value => 5;
 
         public override List<Coordinate> AvailableMoves(Board board) {
             throw new System.NotImplementedException();
@@ -18,7 +20,7 @@ namespace MinMax.Scripts {
         }
 
         public override object Clone() {
-            return new King(Owner, CurrentCoordinate);
+            return new CheckersKing(Player, CurrentCoordinate);
         }
         
     }
