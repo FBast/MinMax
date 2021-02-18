@@ -5,8 +5,8 @@ using UnityEngine;
 namespace Checkers {
     public class CheckersMen : Piece {
 
-        public CheckersMen(PlayerColor player, Coordinate currentCoordinate) : base(player, currentCoordinate) { }
-
+        public CheckersMen(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
+        
         public override int Value => 1;
         
         public override List<Coordinate> AvailableMoves(Board board) {
@@ -71,8 +71,9 @@ namespace Checkers {
         }
 
         public override object Clone() {
-            return new CheckersMen(Player, CurrentCoordinate);
+            return new CheckersMen(CurrentCoordinate, Player);
         }
-        
+
+
     }
 }

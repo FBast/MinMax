@@ -3,10 +3,10 @@
 namespace Chess {
     public class ChessBishop : Piece {
         
-        public ChessBishop(PlayerColor player, Coordinate currentCoordinate) : base(player, currentCoordinate) { }
-
+        public ChessBishop(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
+        
         public override int Value => 5;
-
+        
         public override List<Coordinate> AvailableMoves(Board board) {
             List<Coordinate> availableMoves = new List<Coordinate>();
             // Moves to the topRight
@@ -48,8 +48,8 @@ namespace Chess {
         }
 
         public override object Clone() {
-            return new ChessBishop(Player, CurrentCoordinate);
+            return new ChessBishop(CurrentCoordinate, Player);
         }
-        
+
     }
 }

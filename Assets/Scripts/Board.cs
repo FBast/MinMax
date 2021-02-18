@@ -23,31 +23,67 @@ public class Board : ICloneable {
     public Piece GetPiece(Coordinate coordinate) {
         return Matrix[coordinate.X, coordinate.Y];
     }
-    
-    public void SetupCheckersBoard() {
-        Matrix = new Piece[,] {
-            {new CheckersMen(PlayerColor.White, new Coordinate(0, 0)), null, new CheckersMen(PlayerColor.White, new Coordinate(0, 2)), null, new CheckersMen(PlayerColor.White, new Coordinate(0, 4)), null, new CheckersMen(PlayerColor.White, new Coordinate(0, 6)), null},
-            {null, new CheckersMen(PlayerColor.White, new Coordinate(1, 1)), null, new CheckersMen(PlayerColor.White, new Coordinate(1, 3)), null, new CheckersMen(PlayerColor.White, new Coordinate(1, 5)), null, new CheckersMen(PlayerColor.White, new Coordinate(1, 7))},
-            {new CheckersMen(PlayerColor.White, new Coordinate(2, 0)), null, new CheckersMen(PlayerColor.White, new Coordinate(2, 2)), null, new CheckersMen(PlayerColor.White, new Coordinate(2, 4)), null, new CheckersMen(PlayerColor.White, new Coordinate(2, 6)), null},
-            {null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null},
-            {null, new CheckersMen(PlayerColor.Black, new Coordinate(5, 1)), null, new CheckersMen(PlayerColor.Black, new Coordinate(5, 3)), null, new CheckersMen(PlayerColor.Black, new Coordinate(5, 5)), null, new CheckersMen(PlayerColor.Black, new Coordinate(5, 7))},
-            {new CheckersMen(PlayerColor.Black, new Coordinate(6, 0)), null, new CheckersMen(PlayerColor.Black, new Coordinate(6, 2)), null, new CheckersMen(PlayerColor.Black, new Coordinate(6, 4)), null, new CheckersMen(PlayerColor.Black, new Coordinate(6, 6)), null},
-            {null, new CheckersMen(PlayerColor.Black, new Coordinate(7, 1)), null, new CheckersMen(PlayerColor.Black, new Coordinate(7, 3)), null, new CheckersMen(PlayerColor.Black, new Coordinate(7, 5)), null, new CheckersMen(PlayerColor.Black, new Coordinate(7, 7))}
-        };
-    }
-       
-    public void SetupChessBoard() {
-        Matrix = new Piece[,] {
-            {new ChessRook(PlayerColor.White, new Coordinate(0, 0)), new ChessKnight(PlayerColor.White, new Coordinate(0, 1)), new ChessBishop(PlayerColor.White, new Coordinate(0, 2)), new ChessQueen(PlayerColor.White, new Coordinate(0, 3)), new ChessKing(PlayerColor.White, new Coordinate(0, 4)), new ChessBishop(PlayerColor.White, new Coordinate(0, 5)), new ChessKnight(PlayerColor.White, new Coordinate(0, 6)), new ChessRook(PlayerColor.White, new Coordinate(0, 7))},
-            {new ChessPawn(PlayerColor.White, new Coordinate(1, 0)), new ChessPawn(PlayerColor.White, new Coordinate(1, 1)), new ChessPawn(PlayerColor.White, new Coordinate(1, 2)), new ChessPawn(PlayerColor.White, new Coordinate(1, 3)), new ChessPawn(PlayerColor.White, new Coordinate(1, 4)), new ChessPawn(PlayerColor.White, new Coordinate(1, 5)), new ChessPawn(PlayerColor.White, new Coordinate(1, 6)), new ChessPawn(PlayerColor.White, new Coordinate(1, 7))},
-            {null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null},
-            {new ChessPawn(PlayerColor.Black, new Coordinate(6, 0)), new ChessPawn(PlayerColor.Black, new Coordinate(6, 1)), new ChessPawn(PlayerColor.Black, new Coordinate(6, 2)), new ChessPawn(PlayerColor.Black, new Coordinate(6, 3)), new ChessPawn(PlayerColor.Black, new Coordinate(6, 4)), new ChessPawn(PlayerColor.Black, new Coordinate(6, 5)), new ChessPawn(PlayerColor.Black, new Coordinate(6, 6)), new ChessPawn(PlayerColor.Black, new Coordinate(6, 7))},
-            {new ChessRook(PlayerColor.Black, new Coordinate(7, 0)), new ChessKnight(PlayerColor.Black, new Coordinate(7, 1)), new ChessBishop(PlayerColor.Black, new Coordinate(7, 2)), new ChessQueen(PlayerColor.Black, new Coordinate(7, 3)), new ChessKing(PlayerColor.Black, new Coordinate(7, 4)), new ChessBishop(PlayerColor.Black, new Coordinate(7, 5)), new ChessKnight(PlayerColor.Black, new Coordinate(7, 6)), new ChessRook(PlayerColor.Black, new Coordinate(7, 7))}
-        };
+
+    public void ConvertHandyMatrix(Pieces[,] handyMatrix) {
+        Matrix = new Piece[handyMatrix.GetLength(0), handyMatrix.GetLength(1)];
+        for (int i = 0; i < handyMatrix.GetLength(0); i++) {
+            for (int j = 0; j < handyMatrix.GetLength(1); j++) {
+                switch (handyMatrix[i,j]) {
+                    case Pieces.None:
+                        break;
+                    case Pieces.WhiteChessPawn:
+                        Matrix[j,i] = new ChessPawn(new Coordinate(j, i), PlayerColor.White);
+                        break;
+                    case Pieces.BlackChessPawn:
+                        Matrix[j,i] = new ChessPawn(new Coordinate(j, i), PlayerColor.Black);
+                        break;
+                    case Pieces.WhiteChessRook:
+                        Matrix[j,i] = new ChessRook(new Coordinate(j, i), PlayerColor.White);
+                        break;
+                    case Pieces.BlackChessRook:
+                        Matrix[j,i] = new ChessRook(new Coordinate(j, i), PlayerColor.Black);
+                        break;
+                    case Pieces.WhiteChessKnight:
+                        Matrix[j,i] = new ChessKnight(new Coordinate(j, i), PlayerColor.White);
+                        break;
+                    case Pieces.BlackChessKnight:
+                        Matrix[j,i] = new ChessKnight(new Coordinate(j, i), PlayerColor.Black);
+                        break;
+                    case Pieces.WhiteChessBishop:
+                        Matrix[j,i] = new ChessBishop(new Coordinate(j, i), PlayerColor.White);
+                        break;
+                    case Pieces.BlackChessBishop:
+                        Matrix[j,i] = new ChessBishop(new Coordinate(j, i), PlayerColor.Black);
+                        break;
+                    case Pieces.WhiteChessQueen:
+                        Matrix[j,i] = new ChessQueen(new Coordinate(j, i), PlayerColor.White);
+                        break;
+                    case Pieces.BlackChessQueen:
+                        Matrix[j,i] = new ChessQueen(new Coordinate(j, i), PlayerColor.Black);
+                        break;
+                    case Pieces.WhiteChessKing:
+                        Matrix[j,i] = new ChessKing(new Coordinate(j, i), PlayerColor.White);
+                        break;
+                    case Pieces.BlackChessKing:
+                        Matrix[j,i] = new ChessKing(new Coordinate(j, i), PlayerColor.Black);
+                        break;
+                    case Pieces.WhiteCheckersMen:
+                        Matrix[j,i] = new CheckersMen(new Coordinate(j, i), PlayerColor.White);
+                        break;
+                    case Pieces.BlackCheckersMen:
+                        Matrix[j,i] = new CheckersMen(new Coordinate(j, i), PlayerColor.Black);
+                        break;
+                    case Pieces.WhiteCheckersKing:
+                        Matrix[j,i] = new CheckersKing(new Coordinate(j, i), PlayerColor.White);
+                        break;
+                    case Pieces.BlackCheckersKing:
+                        Matrix[j,i] = new CheckersKing(new Coordinate(j, i), PlayerColor.Black);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
     }
     
     public IEnumerable<Piece> AvailablePieces(PlayerColor playerColor) {
@@ -66,5 +102,5 @@ public class Board : ICloneable {
         }
         return board;
     }
-        
+
 }

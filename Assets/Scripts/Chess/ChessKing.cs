@@ -3,8 +3,8 @@
 namespace Chess {
     public class ChessKing : Piece {
         
-        public ChessKing(PlayerColor player, Coordinate currentCoordinate) : base(player, currentCoordinate) { }
-
+        public ChessKing(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
+        
         public override int Value => 10;
 
         public override List<Coordinate> AvailableMoves(Board board) {
@@ -48,8 +48,9 @@ namespace Chess {
         }
 
         public override object Clone() {
-            return new ChessKing(Player, CurrentCoordinate);
+            return new ChessKing(CurrentCoordinate, Player);
         }
-        
+
+
     }
 }

@@ -5,7 +5,7 @@ namespace Chess {
         
         private bool _hasMoved;
         
-        public ChessPawn(PlayerColor player, Coordinate currentCoordinate) : base(player, currentCoordinate) { }
+        public ChessPawn(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
 
         public override int Value => 1;
 
@@ -47,8 +47,9 @@ namespace Chess {
         }
 
         public override object Clone() {
-            return new ChessPawn(Player, CurrentCoordinate);
+            return new ChessPawn(CurrentCoordinate, Player);
         }
-        
+
+
     }
 }

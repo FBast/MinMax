@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using Checkers;
 using Chess;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : SerializedMonoBehaviour {
 
     [Header("Checkers")]
     public GameObject CheckersWhiteMenPrefab;
@@ -28,19 +29,24 @@ public class GameManager : MonoBehaviour {
     
     [Header("Parameters")]
     public List<Transform> PositionList;
-    public Transform[,] PhysicalMatrix;
-    public Board Board = new Board();
     public Transform PiecesContent;
+    public bool UseTestingBoard;
 
+    [Header("Matrix")] 
+    [TableMatrix(HorizontalTitle = "ChessBoard")] public Pieces[,] ChessBoard = new Pieces[8,8];
+    [TableMatrix(HorizontalTitle = "TestingBoard")] public Pieces[,] TestingBoard = new Pieces[8,8];
+
+    private readonly Board _board = new Board();
+    private Transform[,] _physicalMatrix;
     private AI _whiteAI;
     private AI _blackAI;
     private bool _isBlackTurn;
 
-    private void Awake() { 
+    private void Awake() {
         GeneratePositionMatrix();
-        Board.SetupChessBoard();
+        _board.ConvertHandyMatrix(UseTestingBoard ? TestingBoard : ChessBoard);
         CreateAI();
-        UpdatePhysicalBoard();
+        UpdatePhysicalBoard(_board);
     }
 
     private void Update() {
@@ -49,42 +55,42 @@ public class GameManager : MonoBehaviour {
                 _blackAI.Think();
                 _blackAI.Act();
                 _isBlackTurn = false;
-                UpdatePhysicalBoard();
+                UpdatePhysicalBoard(_board);
             }
             else {
                 _whiteAI.Think();
                 _whiteAI.Act();
                 _isBlackTurn = true;
-                UpdatePhysicalBoard();
+                UpdatePhysicalBoard(_board);
             }
         }
     }
 
     private void GeneratePositionMatrix() {
-        PhysicalMatrix = new Transform[(int) Mathf.Sqrt(PositionList.Count),(int) Mathf.Sqrt(PositionList.Count)];
+        _physicalMatrix = new Transform[(int) Mathf.Sqrt(PositionList.Count),(int) Mathf.Sqrt(PositionList.Count)];
         foreach (Transform cellTransform in PositionList) {
             int row = Convert.ToInt32(cellTransform.name.Split('.')[0]);
             int column = Convert.ToInt32(cellTransform.name.Split('.')[1]);
-            PhysicalMatrix[row, column] = cellTransform;
+            _physicalMatrix[row, column] = cellTransform;
         }
     }
 
     public void CreateAI() {
-        _whiteAI = new AI(Board, PlayerColor.White);
-        _blackAI = new AI(Board, PlayerColor.Black);
+        _whiteAI = new AI(_board, PlayerColor.White);
+        _blackAI = new AI(_board, PlayerColor.Black);
     }
         
-    private void UpdatePhysicalBoard() {
+    public void UpdatePhysicalBoard(Board board) {
         // Clear previous pieces
         foreach (Transform child in PiecesContent) {
             Destroy(child.gameObject);
         }
         // Rebuild all pieces
-        for (int i = 0; i < Board.Matrix.GetLength(0); i++) {
-            for (int j = 0; j < Board.Matrix.GetLength(1); j++) {
-                if (Board.Matrix[i, j] == null) continue;
-                Piece piece = Board.Matrix[i, j];
-                Instantiate(GetPhysicalPiece(piece, piece.Player), PhysicalMatrix[i, j].position, Quaternion.identity,PiecesContent);
+        for (int i = 0; i < board.Matrix.GetLength(0); i++) {
+            for (int j = 0; j < board.Matrix.GetLength(1); j++) {
+                if (board.Matrix[i, j] == null) continue;
+                Piece piece = board.Matrix[i, j];
+                Instantiate(GetPhysicalPiece(piece, piece.Player), _physicalMatrix[i, j].position, Quaternion.identity,PiecesContent);
             }
         }
     }

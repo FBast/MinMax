@@ -24,18 +24,17 @@ public class Node {
         }
     }
 
-    public bool IsTerminal {
-        get { return Board.AvailablePieces(PlayerColor).Sum(piece => piece.AvailableMoves(Board).Count) > 0; }
-    }
+    public bool IsTerminal => false;
+    
+//    public bool IsTerminal {
+//        get { return Board.AvailablePieces(PlayerColor).Sum(piece => piece.AvailableMoves(Board).Count) > 0; }
+//    }
 
     public Node(Board board, PlayerColor playerColor, Coordinate moveOrigin, Coordinate moveDestination) {
         Board = (Board) board.Clone();
         PlayerColor = playerColor;
         MoveOrigin = moveOrigin;
         MoveDestination = moveDestination;
-        Debug.Log("Creating Node for " + playerColor + 
-                  " with move : " + moveOrigin.X + " " + moveOrigin.Y + 
-                  " to " + moveDestination.X + " " + moveDestination.Y);
         Piece piece = Board.GetPiece(MoveOrigin);
         if (piece == null) throw new Exception("Cannot get piece on origin : " + moveOrigin.X + " " + moveOrigin.Y);
         HeuristicValue = piece.EvaluateMove(Board, MoveDestination);
