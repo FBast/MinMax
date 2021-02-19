@@ -1,7 +1,7 @@
 ﻿public struct Coordinate {
 
-    public int X;
-    public int Y;
+    public int Row;
+    public int Column;
 
     public static Coordinate Zero => new Coordinate(0, 0);
     public static Coordinate Top => new Coordinate(1, 0);
@@ -31,27 +31,27 @@
     public Coordinate ToLeftJump => this + Left * 2;
     public Coordinate ToTopLeftJump => this + TopLeft * 2;
 
-    public Coordinate(int x, int y) {
-        X = x;
-        Y = y;
+    public Coordinate(int row, int column) {
+        Row = row;
+        Column = column;
     }
 
     public static Coordinate operator +(Coordinate a) => a;
     
-    public static Coordinate operator -(Coordinate a) => new Coordinate(-a.X, -a.Y);
+    public static Coordinate operator -(Coordinate a) => new Coordinate(-a.Row, -a.Column);
 
-    public static Coordinate operator +(Coordinate a, Coordinate b) => new Coordinate(a.X + b.X, a.Y + b.Y);
+    public static Coordinate operator +(Coordinate a, Coordinate b) => new Coordinate(a.Row + b.Row, a.Column + b.Column);
 
-    public static Coordinate operator -(Coordinate a, Coordinate b) => new Coordinate(a.X - b.X, a.Y - b.Y);
+    public static Coordinate operator -(Coordinate a, Coordinate b) => new Coordinate(a.Row - b.Row, a.Column - b.Column);
 
-    public static Coordinate operator *(Coordinate a, int b) => new Coordinate(a.X * b, a.Y * b);
+    public static Coordinate operator *(Coordinate a, int b) => new Coordinate(a.Row * b, a.Column * b);
     
-    public static Coordinate operator *(Coordinate a, Coordinate b) => new Coordinate(a.X * b.X, a.Y * b.Y);
+    public static Coordinate operator *(Coordinate a, Coordinate b) => new Coordinate(a.Row * b.Row, a.Column * b.Column);
 
-    public static Coordinate operator /(Coordinate a, Coordinate b) => new Coordinate(a.X / b.X, a.Y / b.Y);
+    public static Coordinate operator /(Coordinate a, Coordinate b) => new Coordinate(a.Row / b.Row, a.Column / b.Column);
     
     public override string ToString() {
-        return "Coordinate : " + X + " " + Y;
+        return "Coordinate : " + Row + " " + Column;
     }
         
 }

@@ -11,7 +11,7 @@ namespace Checkers {
             throw new System.NotImplementedException();
         }
 
-        public override int EvaluateMove(Board board, Coordinate destination) {
+        public override int MoveEvaluation(Board board, Coordinate destination) {
             throw new System.NotImplementedException();
         }
 

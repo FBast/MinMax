@@ -10,74 +10,74 @@ public class Board : ICloneable {
     [ItemCanBeNull] public Piece[,] Matrix = new Piece[8, 8];
 
     public bool OccupiedCoordinate(Coordinate coordinate, PlayerColor? playerColor = null) {
-        if (playerColor == null) return Matrix[coordinate.X, coordinate.Y] != null;
-        return Matrix[coordinate.X, coordinate.Y] != null &&
-               Matrix[coordinate.X, coordinate.Y].Player == playerColor;
+        if (playerColor == null) return Matrix[coordinate.Row, coordinate.Column] != null;
+        return Matrix[coordinate.Row, coordinate.Column] != null &&
+               Matrix[coordinate.Row, coordinate.Column].Player == playerColor;
     }
     
     public bool ValidCoordinate(Coordinate coordinate) {
-        return coordinate.X >= 0 && coordinate.X < Matrix.GetLength(0) && 
-               coordinate.Y >= 0 && coordinate.Y < Matrix.GetLength(1);
+        return coordinate.Row >= 0 && coordinate.Row < Matrix.GetLength(0) && 
+               coordinate.Column >= 0 && coordinate.Column < Matrix.GetLength(1);
     }
         
     public Piece GetPiece(Coordinate coordinate) {
-        return Matrix[coordinate.X, coordinate.Y];
+        return Matrix[coordinate.Row, coordinate.Column];
     }
 
     public void ConvertHandyMatrix(Pieces[,] handyMatrix) {
         Matrix = new Piece[handyMatrix.GetLength(0), handyMatrix.GetLength(1)];
         for (int i = 0; i < handyMatrix.GetLength(0); i++) {
             for (int j = 0; j < handyMatrix.GetLength(1); j++) {
-                switch (handyMatrix[i,j]) {
+                switch (handyMatrix[j, i]) {
                     case Pieces.None:
                         break;
                     case Pieces.WhiteChessPawn:
-                        Matrix[j,i] = new ChessPawn(new Coordinate(j, i), PlayerColor.White);
+                        Matrix[i, j] = new ChessPawn(new Coordinate(i, j), PlayerColor.White);
                         break;
                     case Pieces.BlackChessPawn:
-                        Matrix[j,i] = new ChessPawn(new Coordinate(j, i), PlayerColor.Black);
+                        Matrix[i, j] = new ChessPawn(new Coordinate(i, j), PlayerColor.Black);
                         break;
                     case Pieces.WhiteChessRook:
-                        Matrix[j,i] = new ChessRook(new Coordinate(j, i), PlayerColor.White);
+                        Matrix[i, j] = new ChessRook(new Coordinate(i, j), PlayerColor.White);
                         break;
                     case Pieces.BlackChessRook:
-                        Matrix[j,i] = new ChessRook(new Coordinate(j, i), PlayerColor.Black);
+                        Matrix[i, j] = new ChessRook(new Coordinate(i, j), PlayerColor.Black);
                         break;
                     case Pieces.WhiteChessKnight:
-                        Matrix[j,i] = new ChessKnight(new Coordinate(j, i), PlayerColor.White);
+                        Matrix[i, j] = new ChessKnight(new Coordinate(i, j), PlayerColor.White);
                         break;
                     case Pieces.BlackChessKnight:
-                        Matrix[j,i] = new ChessKnight(new Coordinate(j, i), PlayerColor.Black);
+                        Matrix[i, j] = new ChessKnight(new Coordinate(i, j), PlayerColor.Black);
                         break;
                     case Pieces.WhiteChessBishop:
-                        Matrix[j,i] = new ChessBishop(new Coordinate(j, i), PlayerColor.White);
+                        Matrix[i, j] = new ChessBishop(new Coordinate(i, j), PlayerColor.White);
                         break;
                     case Pieces.BlackChessBishop:
-                        Matrix[j,i] = new ChessBishop(new Coordinate(j, i), PlayerColor.Black);
+                        Matrix[i, j] = new ChessBishop(new Coordinate(i, j), PlayerColor.Black);
                         break;
                     case Pieces.WhiteChessQueen:
-                        Matrix[j,i] = new ChessQueen(new Coordinate(j, i), PlayerColor.White);
+                        Matrix[i, j] = new ChessQueen(new Coordinate(i, j), PlayerColor.White);
                         break;
                     case Pieces.BlackChessQueen:
-                        Matrix[j,i] = new ChessQueen(new Coordinate(j, i), PlayerColor.Black);
+                        Matrix[i, j] = new ChessQueen(new Coordinate(i, j), PlayerColor.Black);
                         break;
                     case Pieces.WhiteChessKing:
-                        Matrix[j,i] = new ChessKing(new Coordinate(j, i), PlayerColor.White);
+                        Matrix[i, j] = new ChessKing(new Coordinate(i, j), PlayerColor.White);
                         break;
                     case Pieces.BlackChessKing:
-                        Matrix[j,i] = new ChessKing(new Coordinate(j, i), PlayerColor.Black);
+                        Matrix[i, j] = new ChessKing(new Coordinate(i, j), PlayerColor.Black);
                         break;
                     case Pieces.WhiteCheckersMen:
-                        Matrix[j,i] = new CheckersMen(new Coordinate(j, i), PlayerColor.White);
+                        Matrix[i, j] = new CheckersMen(new Coordinate(i, j), PlayerColor.White);
                         break;
                     case Pieces.BlackCheckersMen:
-                        Matrix[j,i] = new CheckersMen(new Coordinate(j, i), PlayerColor.Black);
+                        Matrix[i, j] = new CheckersMen(new Coordinate(i, j), PlayerColor.Black);
                         break;
                     case Pieces.WhiteCheckersKing:
-                        Matrix[j,i] = new CheckersKing(new Coordinate(j, i), PlayerColor.White);
+                        Matrix[i, j] = new CheckersKing(new Coordinate(i, j), PlayerColor.White);
                         break;
                     case Pieces.BlackCheckersKing:
-                        Matrix[j,i] = new CheckersKing(new Coordinate(j, i), PlayerColor.Black);
+                        Matrix[i, j] = new CheckersKing(new Coordinate(i, j), PlayerColor.Black);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

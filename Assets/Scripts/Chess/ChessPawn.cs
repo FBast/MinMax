@@ -12,7 +12,8 @@ namespace Chess {
         public override List<Coordinate> AvailableMoves(Board board) {
             List<Coordinate> availableMoves = new List<Coordinate>();
             if (Player == PlayerColor.White) {
-                if (!_hasMoved && board.ValidCoordinate(CurrentCoordinate.ToTopJump) && !board.OccupiedCoordinate(CurrentCoordinate.ToTopJump)) 
+                if (!_hasMoved && board.ValidCoordinate(CurrentCoordinate.ToTopJump) && !board.OccupiedCoordinate(CurrentCoordinate.ToTopJump) && 
+                    !board.OccupiedCoordinate(CurrentCoordinate.ToTop)) 
                     availableMoves.Add(CurrentCoordinate.ToTopJump);
                 if (board.ValidCoordinate(CurrentCoordinate.ToTop) && !board.OccupiedCoordinate(CurrentCoordinate.ToTop)) 
                     availableMoves.Add(CurrentCoordinate.ToTop);
@@ -22,7 +23,8 @@ namespace Chess {
                     availableMoves.Add(CurrentCoordinate.ToTopLeft);
             }
             if (Player == PlayerColor.Black) {
-                if (!_hasMoved && board.ValidCoordinate(CurrentCoordinate.ToBottomJump) && !board.OccupiedCoordinate(CurrentCoordinate.ToBottomJump)) 
+                if (!_hasMoved && board.ValidCoordinate(CurrentCoordinate.ToBottomJump) && !board.OccupiedCoordinate(CurrentCoordinate.ToBottomJump) &&
+                    !board.OccupiedCoordinate(CurrentCoordinate.ToBottom)) 
                     availableMoves.Add(CurrentCoordinate.ToBottomJump);
                 if (board.ValidCoordinate(CurrentCoordinate.ToBottom) && !board.OccupiedCoordinate(CurrentCoordinate.ToBottom))
                     availableMoves.Add(CurrentCoordinate.ToBottom);
@@ -34,15 +36,15 @@ namespace Chess {
             return availableMoves;
         }
 
-        public override int EvaluateMove(Board board, Coordinate destination) {
+        public override int MoveEvaluation(Board board, Coordinate destination) {
             return board.GetPiece(destination)?.Value ?? 0;
         }
 
         public override void ExecuteMove(Board board, Coordinate destination) {
             _hasMoved = true;
             // Move to position
-            board.Matrix[destination.X, destination.Y] = board.Matrix[CurrentCoordinate.X, CurrentCoordinate.Y];
-            board.Matrix[CurrentCoordinate.X, CurrentCoordinate.Y] = null;
+            board.Matrix[destination.Row, destination.Column] = board.Matrix[CurrentCoordinate.Row, CurrentCoordinate.Column];
+            board.Matrix[CurrentCoordinate.Row, CurrentCoordinate.Column] = null;
             CurrentCoordinate = destination;
         }
 

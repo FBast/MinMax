@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Checkers;
 using Chess;
 using Sirenix.OdinInspector;
@@ -7,6 +9,15 @@ using UnityEngine;
 
 public class GameManager : SerializedMonoBehaviour {
 
+    [Header("Parameters")]
+    public bool AutoPlay;
+    public bool UseTestingBoard;
+    public int Depth;
+    
+    [Header("Camera")] 
+    public GameObject CameraPivot;
+    public float TimeBeforeRotation;
+    
     [Header("Checkers")]
     public GameObject CheckersWhiteMenPrefab;
     public GameObject CheckersWhiteKingPrefab;
@@ -26,21 +37,20 @@ public class GameManager : SerializedMonoBehaviour {
     public GameObject ChessBlackQueenPrefab;
     public GameObject ChessWhiteKingPrefab;
     public GameObject ChessBlackKingPrefab;
-    
-    [Header("Parameters")]
+
+    [Header("Board")] 
     public List<Transform> PositionList;
     public Transform PiecesContent;
-    public bool UseTestingBoard;
 
-    [Header("Matrix")] 
+    [Header("Matrix")]
     [TableMatrix(HorizontalTitle = "ChessBoard")] public Pieces[,] ChessBoard = new Pieces[8,8];
     [TableMatrix(HorizontalTitle = "TestingBoard")] public Pieces[,] TestingBoard = new Pieces[8,8];
 
     private readonly Board _board = new Board();
     private Transform[,] _physicalMatrix;
-    private AI _whiteAI;
-    private AI _blackAI;
-    private bool _isBlackTurn;
+    private readonly Queue<AIBrain> _inQueueBrains = new Queue<AIBrain>();
+    private AIBrain _currentPlayer;
+    private bool _isPlaying;
 
     private void Awake() {
         GeneratePositionMatrix();
@@ -50,19 +60,8 @@ public class GameManager : SerializedMonoBehaviour {
     }
 
     private void Update() {
-        if (Input.GetButtonUp("Jump")) {
-            if (_isBlackTurn) {
-                _blackAI.Think();
-                _blackAI.Act();
-                _isBlackTurn = false;
-                UpdatePhysicalBoard(_board);
-            }
-            else {
-                _whiteAI.Think();
-                _whiteAI.Act();
-                _isBlackTurn = true;
-                UpdatePhysicalBoard(_board);
-            }
+        if ((Input.GetButtonUp("Jump") || AutoPlay) && !_isPlaying) {
+            StartCoroutine(nameof(Play));
         }
     }
 
@@ -74,12 +73,27 @@ public class GameManager : SerializedMonoBehaviour {
             _physicalMatrix[row, column] = cellTransform;
         }
     }
-
+    
     public void CreateAI() {
-        _whiteAI = new AI(_board, PlayerColor.White);
-        _blackAI = new AI(_board, PlayerColor.Black);
+        _currentPlayer = new AIBrain(_board, PlayerColor.White, Depth);
+        _inQueueBrains.Enqueue(new AIBrain(_board, PlayerColor.Black, Depth));
     }
-        
+    
+    private void Play() {
+        _isPlaying = true;
+        _currentPlayer.Think();
+        _currentPlayer.Act();
+        UpdatePhysicalBoard(_board);
+        _inQueueBrains.Enqueue(_currentPlayer);
+        _currentPlayer = _inQueueBrains.Dequeue();
+        Invoke(nameof(RotateCamera), TimeBeforeRotation);
+    }
+
+    private void RotateCamera() {
+        CameraPivot.transform.rotation *= Quaternion.Euler(0, 180, 0);
+        _isPlaying = false;
+    }
+    
     public void UpdatePhysicalBoard(Board board) {
         // Clear previous pieces
         foreach (Transform child in PiecesContent) {

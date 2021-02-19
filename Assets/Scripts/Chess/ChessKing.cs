@@ -36,14 +36,14 @@ namespace Chess {
             return availableMoves;
         }
 
-        public override int EvaluateMove(Board board, Coordinate destination) {
+        public override int MoveEvaluation(Board board, Coordinate destination) {
             return board.GetPiece(destination)?.Value ?? 0;
         }
 
         public override void ExecuteMove(Board board, Coordinate destination) {
             // Move to position
-            board.Matrix[destination.X, destination.Y] = board.Matrix[CurrentCoordinate.X, CurrentCoordinate.Y];
-            board.Matrix[CurrentCoordinate.X, CurrentCoordinate.Y] = null;
+            board.Matrix[destination.Row, destination.Column] = board.Matrix[CurrentCoordinate.Row, CurrentCoordinate.Column];
+            board.Matrix[CurrentCoordinate.Row, CurrentCoordinate.Column] = null;
             CurrentCoordinate = destination;
         }
 

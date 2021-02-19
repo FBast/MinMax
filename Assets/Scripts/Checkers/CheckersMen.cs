@@ -45,10 +45,10 @@ namespace Checkers {
             return availableMoves;
         }
 
-        public override int EvaluateMove(Board board, Coordinate destination) {
+        public override int MoveEvaluation(Board board, Coordinate destination) {
             // Normal Eat move
-            int xDistance = CurrentCoordinate.X - destination.X;
-            int yDistance = CurrentCoordinate.Y - destination.Y;
+            int xDistance = CurrentCoordinate.Row - destination.Row;
+            int yDistance = CurrentCoordinate.Column - destination.Column;
             if (Mathf.Abs(xDistance) == 2 && Mathf.Abs(yDistance) == 2) {
                 return board.GetPiece(CurrentCoordinate + new Coordinate(xDistance, yDistance)).Value;
             }
@@ -57,13 +57,13 @@ namespace Checkers {
 
         public override void ExecuteMove(Board board, Coordinate destination) {
             // Move to position
-            board.Matrix[destination.X, destination.Y] = board.Matrix[CurrentCoordinate.X, CurrentCoordinate.Y];
-            board.Matrix[CurrentCoordinate.X, CurrentCoordinate.Y] = null;
+            board.Matrix[destination.Row, destination.Column] = board.Matrix[CurrentCoordinate.Row, CurrentCoordinate.Column];
+            board.Matrix[CurrentCoordinate.Row, CurrentCoordinate.Column] = null;
             // Remove all checkers between the 2 positions
-            int xSign = Math.Sign(destination.X - CurrentCoordinate.X);
-            int ySign = Math.Sign(destination.Y - CurrentCoordinate.Y);
-            for (int i = CurrentCoordinate.X; i != destination.X; i += xSign) {
-                for (int j = CurrentCoordinate.Y; j != destination.Y; j += ySign) {
+            int xSign = Math.Sign(destination.Row - CurrentCoordinate.Row);
+            int ySign = Math.Sign(destination.Column - CurrentCoordinate.Column);
+            for (int i = CurrentCoordinate.Row; i != destination.Row; i += xSign) {
+                for (int j = CurrentCoordinate.Column; j != destination.Column; j += ySign) {
                     board.Matrix[i, j] = null;
                 }
             }
