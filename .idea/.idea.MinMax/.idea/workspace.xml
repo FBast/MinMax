@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17eab6cf-79fc-4a2c-b97f-fd4cd90636d9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MinMax/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MinMax/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MinMax/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MinMax/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/MinMax.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MinMax.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/AIBrain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AIBrain.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Board.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Board.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,16 +68,16 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Pieces.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Coordinate.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/AI.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Checkers/CheckersMen.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessKnight.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessQueen.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessRook.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Board.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Piece.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessPawn.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Node.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessBishop.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Node.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Board.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessPawn.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/AIBrain.cs" />
       </list>
     </option>
@@ -131,10 +135,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="15688">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="15688" />
+      <option name="pid" />
       <option name="selectedOptions">
         <set />
       </option>
@@ -167,6 +171,8 @@
       <workItem from="1613744290126" duration="2578000" />
       <workItem from="1613747778321" duration="6436000" />
       <workItem from="1613821649942" duration="12549000" />
+      <workItem from="1613848646931" duration="2536000" />
+      <workItem from="1613851611220" duration="1169000" />
     </task>
     <servers />
   </component>

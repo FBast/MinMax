@@ -102,8 +102,8 @@ public class GameManager : SerializedMonoBehaviour {
         // Rebuild all pieces
         for (int i = 0; i < board.Matrix.GetLength(0); i++) {
             for (int j = 0; j < board.Matrix.GetLength(1); j++) {
-                if (board.Matrix[i, j] == null) continue;
                 Piece piece = board.Matrix[i, j];
+                if (piece == null) continue;
                 Instantiate(GetPhysicalPiece(piece, piece.Player), _physicalMatrix[i, j].position, Quaternion.identity,PiecesContent);
             }
         }

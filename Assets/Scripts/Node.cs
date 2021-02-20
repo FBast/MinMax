@@ -11,16 +11,19 @@ public class Node {
     public int HeuristicValue;
         
     public PlayerColor OtherPlayerTurn => PlayerTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
-    
+
+    private List<Node> _children;
     public List<Node> Children {
         get {
-            List<Node> children = new List<Node>();
-            foreach (Piece availablePiece in Board.AvailablePieces(OtherPlayerTurn)) {
-                foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
-                    children.Add(new Node(Board, PlayerEval, OtherPlayerTurn, availablePiece.CurrentCoordinate, availableMove));
+            if (_children == null) {
+                _children = new List<Node>();
+                foreach (Piece availablePiece in Board.AvailablePieces(OtherPlayerTurn)) {
+                    foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
+                        _children.Add(new Node(Board, PlayerEval, OtherPlayerTurn, availablePiece.CurrentCoordinate, availableMove));
+                    }
                 }
-            }
-            return children;
+            } 
+            return _children;
         }
     }
 

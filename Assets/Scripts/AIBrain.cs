@@ -22,20 +22,15 @@ public class AIBrain {
     public void Think() {
         Nodes.Clear();
         float startingTime = Time.realtimeSinceStartup;
-        Debug.Log("Thinking...");
-        int childNumber = 1;
         foreach (Piece availablePiece in Board.AvailablePieces(Player)) {
             foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
-                Debug.Log("Child number " + childNumber + " - From " + availablePiece.CurrentCoordinate + " To " + availableMove);
-                childNumber++;
                 Node node = new Node(Board, Player, Player, availablePiece.CurrentCoordinate, availableMove);
                 // int value = MinMax(node, DepthSearch, false);
                 // int value = MinMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, false);
                 // int value = NegaMax(node, DepthSearch, -1);
-                // int value = NegaMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, -1);
-                int value = NegaMaxAlphaBetaTranspositionTables(node, DepthSearch, int.MinValue, int.MaxValue, -1);
+                int value = NegaMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, -1);
+                // int value = NegaMaxAlphaBetaTranspositionTables(node, DepthSearch, int.MinValue, int.MaxValue, -1);
                 Nodes.Add(new Tuple<int, Node>(value, node));
-                Debug.Log("End of evaluation : total heuristic value of " + value);
             }
         }
         Debug.Log("Reflexion took about : " + (Time.realtimeSinceStartup - startingTime) + " seconds");
@@ -46,13 +41,11 @@ public class AIBrain {
         int bestValue = Nodes.Max(node => node.Item1);
         Nodes.RemoveAll(node => node.Item1 < bestValue);
         Tuple<int, Node> selectedTuple = Nodes[Random.Range(0, Nodes.Count)];
-        Debug.Log("Choose with Points : " + selectedTuple.Item1 + " From " + selectedTuple.Item2.MoveOrigin + " To " + selectedTuple.Item2.MoveDestination);
         Board.GetPiece(selectedTuple.Item2.MoveOrigin).ExecuteMove(Board, selectedTuple.Item2.MoveDestination);
     }
         
     private int MinMax(Node node, int depth, bool isMax) {
         if (depth == 0 || node.IsTerminal) {
-            Debug.Log("Last Depth with Points : " + node.HeuristicValue + " From " + node.MoveOrigin + " To " + node.MoveDestination);
             return node.HeuristicValue;
         }
         int value;
@@ -104,7 +97,7 @@ public class AIBrain {
             value = Mathf.Max(value, childValue);
         }
         return color * value;
-    } 
+    }
     
     private int NegaMaxAlphaBeta(Node node, int depth, int alpha, int beta, int color) {
         if (depth == 0 || node.IsTerminal)

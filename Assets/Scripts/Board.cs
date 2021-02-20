@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Checkers;
 using Chess;
 using JetBrains.Annotations;
@@ -95,10 +94,10 @@ public class Board : ICloneable {
     }
     
     public IEnumerable<Piece> AvailablePieces(PlayerColor playerColor) {
-        return 
-            from Piece piece in Matrix 
-            where piece != null && piece.Player == playerColor 
-            select piece;
+        foreach (Piece piece in Matrix) {
+            if (piece == null) continue;
+            if (piece.Player == playerColor) yield return piece;
+        }
     }
         
     public object Clone() {
