@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,9 +30,10 @@ public class AIBrain {
                 childNumber++;
                 Node node = new Node(Board, Player, Player, availablePiece.CurrentCoordinate, availableMove);
                 // int value = MinMax(node, DepthSearch, false);
-                int value = MinMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, false);
-//                int value = NegaMax(node, DepthSearch, -1);
+                // int value = MinMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, false);
+                // int value = NegaMax(node, DepthSearch, -1);
                 // int value = NegaMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, -1);
+                int value = NegaMaxAlphaBetaTranspositionTables(node, DepthSearch, int.MinValue, int.MaxValue, -1);
                 Nodes.Add(new Tuple<int, Node>(value, node));
                 Debug.Log("End of evaluation : total heuristic value of " + value);
             }
@@ -115,5 +117,50 @@ public class AIBrain {
         }
         return color * value;
     }
+
+    public Hashtable Hashtable = new Hashtable();
+
+    public enum HashType {
+        Exact,
+        LowerBound,
+        UpperBound
+    }
     
+    public class HashEntry {
+        
+        public int Depth;
+        public int Value;
+        public HashType Flag;
+        
+    }
+    
+    private int NegaMaxAlphaBetaTranspositionTables(Node node, int depth, int alpha, int beta, int color) {
+        int alphaOrig = alpha;
+        HashEntry hashEntry = (HashEntry) Hashtable[node];
+        if (hashEntry != null && hashEntry.Depth >= depth) {
+            if (hashEntry.Flag == HashType.Exact) return hashEntry.Value;
+            else if (hashEntry.Flag == HashType.LowerBound) alpha = Mathf.Max(alpha, hashEntry.Value);
+            else if (hashEntry.Flag == HashType.UpperBound) beta = Mathf.Min(beta, hashEntry.Value);
+            if (alpha >= beta) return hashEntry.Value;
+        }
+
+        if (depth == 0 || node.IsTerminal) 
+            return color * node.HeuristicValue;
+        int value = int.MinValue;
+        foreach (Node child in node.Children) {
+            value = Mathf.Max(value, -NegaMaxAlphaBeta(child, depth - 1, -beta, -alpha, -color));
+            alpha = Mathf.Max(alpha, value);
+            if (alpha >= beta) break;
+        }
+
+        if (hashEntry == null) hashEntry = new HashEntry();
+        hashEntry.Value = value;
+        if (value <= alphaOrig) hashEntry.Flag = HashType.UpperBound;
+        else if (value >= beta) hashEntry.Flag = HashType.LowerBound;
+        else hashEntry.Flag = HashType.Exact;
+        hashEntry.Depth = depth;
+        Hashtable.Add(node, hashEntry);
+        return value;
+    }
+
 }
