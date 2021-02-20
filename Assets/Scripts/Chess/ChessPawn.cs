@@ -36,10 +36,6 @@ namespace Chess {
             return availableMoves;
         }
 
-        public override int MoveEvaluation(Board board, Coordinate destination) {
-            return board.GetPiece(destination)?.Value ?? 0;
-        }
-
         public override void ExecuteMove(Board board, Coordinate destination) {
             _hasMoved = true;
             // Move to position
@@ -51,7 +47,6 @@ namespace Chess {
         public override object Clone() {
             return new ChessPawn(CurrentCoordinate, Player);
         }
-
 
     }
 }

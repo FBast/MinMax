@@ -5,7 +5,7 @@ namespace Chess {
         
         public ChessBishop(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
         
-        public override int Value => 5;
+        public override int Value => 3;
         
         public override List<Coordinate> AvailableMoves(Board board) {
             List<Coordinate> availableMoves = new List<Coordinate>();
@@ -34,10 +34,6 @@ namespace Chess {
                 if (board.OccupiedCoordinate(coordinate)) break;
             }
             return availableMoves;
-        }
-
-        public override int MoveEvaluation(Board board, Coordinate destination) {
-            return board.GetPiece(destination)?.Value ?? 0; 
         }
 
         public override void ExecuteMove(Board board, Coordinate destination) {

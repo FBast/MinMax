@@ -16,7 +16,6 @@ public abstract class Piece : ICloneable {
     }
     
     public abstract List<Coordinate> AvailableMoves(Board board);
-    public abstract int MoveEvaluation(Board board, Coordinate destination);
     public abstract void ExecuteMove(Board board, Coordinate destination);
     public abstract object Clone();
         

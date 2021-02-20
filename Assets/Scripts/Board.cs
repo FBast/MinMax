@@ -11,8 +11,7 @@ public class Board : ICloneable {
 
     public bool OccupiedCoordinate(Coordinate coordinate, PlayerColor? playerColor = null) {
         if (playerColor == null) return Matrix[coordinate.Row, coordinate.Column] != null;
-        return Matrix[coordinate.Row, coordinate.Column] != null &&
-               Matrix[coordinate.Row, coordinate.Column].Player == playerColor;
+        return Matrix[coordinate.Row, coordinate.Column]?.Player == playerColor;
     }
     
     public bool ValidCoordinate(Coordinate coordinate) {
@@ -85,6 +84,15 @@ public class Board : ICloneable {
             }
         }
     }
+
+    public int Evaluate(PlayerColor playerColor) {
+        int value = 0;
+        foreach (Piece piece in Matrix) {
+            if (piece == null) continue;
+            value += piece.Value * (playerColor == piece.Player ? 1 : -1);
+        }
+        return value;
+    }
     
     public IEnumerable<Piece> AvailablePieces(PlayerColor playerColor) {
         return 
@@ -97,7 +105,7 @@ public class Board : ICloneable {
         Board board = new Board();
         for (int i = 0; i < Matrix.GetLength(0); i++) {
             for (int j = 0; j < Matrix.GetLength(1); j++) {
-                if (Matrix[i, j] != null) board.Matrix[i, j] = (Piece) Matrix[i, j].Clone();
+                board.Matrix[i, j] = (Piece) Matrix[i, j]?.Clone();
             }
         }
         return board;

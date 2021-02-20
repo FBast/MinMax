@@ -1,44 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public class Node {
 
     public Board Board;
+    public PlayerColor PlayerEval;
     public PlayerColor PlayerTurn;
     public Coordinate MoveOrigin;
     public Coordinate MoveDestination;
     public int HeuristicValue;
         
-    public PlayerColor OtherPlayerColor => PlayerTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
+    public PlayerColor OtherPlayerTurn => PlayerTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
     
     public List<Node> Children {
         get {
             List<Node> children = new List<Node>();
-            foreach (Piece availablePiece in Board.AvailablePieces(OtherPlayerColor)) {
+            foreach (Piece availablePiece in Board.AvailablePieces(OtherPlayerTurn)) {
                 foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
-                    children.Add(new Node(Board, OtherPlayerColor, availablePiece.CurrentCoordinate, availableMove));
+                    children.Add(new Node(Board, PlayerEval, OtherPlayerTurn, availablePiece.CurrentCoordinate, availableMove));
                 }
             }
             return children;
         }
     }
 
-    public bool IsTerminal => false;
-    
-//    public bool IsTerminal {
-//        get { return Board.AvailablePieces(OtherPlayerColor).Sum(piece => piece.AvailableMoves(Board).Count) > 0; }
-//    }
+    public bool IsTerminal {
+        get { return Children.Count == 0; }
+    }
 
-    public Node(Board board, PlayerColor playerTurn, Coordinate moveOrigin, Coordinate moveDestination) {
+    public Node(Board board, PlayerColor playerEval, PlayerColor playerTurn, Coordinate moveOrigin, Coordinate moveDestination) {
         Board = (Board) board.Clone();
+        PlayerEval = playerEval;
         PlayerTurn = playerTurn;
         MoveOrigin = moveOrigin;
         MoveDestination = moveDestination;
         Piece piece = Board.GetPiece(MoveOrigin);
         if (piece == null) throw new Exception("Cannot get piece on origin : " + moveOrigin.Row + " " + moveOrigin.Column);
-        HeuristicValue = piece.MoveEvaluation(Board, MoveDestination);
         Board.GetPiece(MoveOrigin).ExecuteMove(Board, MoveDestination);
+        HeuristicValue = Board.Evaluate(PlayerEval);
     }
         
 }

@@ -10,8 +10,6 @@ public class AIBrain {
     public PlayerColor Player;
     public int DepthSearch;
     
-    public PlayerColor OtherPlayer => Player == PlayerColor.Black ? PlayerColor.White : PlayerColor.Black;
-    
     private List<Tuple<int, Node>> Nodes = new List<Tuple<int, Node>>();
 
     public AIBrain(Board board, PlayerColor player, int depthSearch) {
@@ -24,20 +22,21 @@ public class AIBrain {
         Nodes.Clear();
         float startingTime = Time.realtimeSinceStartup;
         Debug.Log("Thinking...");
+        int childNumber = 1;
         foreach (Piece availablePiece in Board.AvailablePieces(Player)) {
             foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
-                Node node = new Node(Board, Player, availablePiece.CurrentCoordinate, availableMove);
-//                int value = MinMax(node, DepthSearch, true);
-//                int value = MinMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, true);
-//                int value = NegaMax(node, DepthSearch, 1);
-                int value = NegaMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, 1);
+                Debug.Log("Child number " + childNumber + " - From " + availablePiece.CurrentCoordinate + " To " + availableMove);
+                childNumber++;
+                Node node = new Node(Board, Player, Player, availablePiece.CurrentCoordinate, availableMove);
+                // int value = MinMax(node, DepthSearch, false);
+                int value = MinMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, false);
+//                int value = NegaMax(node, DepthSearch, -1);
+                // int value = NegaMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, -1);
                 Nodes.Add(new Tuple<int, Node>(value, node));
+                Debug.Log("End of evaluation : total heuristic value of " + value);
             }
         }
         Debug.Log("Reflexion took about : " + (Time.realtimeSinceStartup - startingTime) + " seconds");
-        for (int i = 0; i < Nodes.Count; i++) {
-            Debug.Log(i + " - Points : " + Nodes[i].Item1 + " From " + Nodes[i].Item2.MoveOrigin + " To " + Nodes[i].Item2.MoveDestination);
-        }
     }
     
     public void Act() {
@@ -50,8 +49,10 @@ public class AIBrain {
     }
         
     private int MinMax(Node node, int depth, bool isMax) {
-        if (depth == 0 || node.IsTerminal)
+        if (depth == 0 || node.IsTerminal) {
+            Debug.Log("Last Depth with Points : " + node.HeuristicValue + " From " + node.MoveOrigin + " To " + node.MoveDestination);
             return node.HeuristicValue;
+        }
         int value;
         if (isMax) {
             value = int.MinValue;
@@ -65,7 +66,7 @@ public class AIBrain {
                 value = Mathf.Min(value, MinMax(child, depth - 1, true));
             }
         }
-        return value + node.HeuristicValue * (isMax ? 1 : -1);
+        return value;
     }
 
     // int result = AlphaBetaMinMax(node, Depth, int.MinValue, int.MaxValue, false);
@@ -77,7 +78,7 @@ public class AIBrain {
             value = int.MinValue;
             foreach (Node child in node.Children) {
                 value = Mathf.Max(value, MinMaxAlphaBeta(child, depth - 1, alpha, beta, false));
-                if (value >= beta) return value + node.HeuristicValue;
+                if (value >= beta) return value;
                 alpha = Mathf.Max(alpha, value);
             }
         }
@@ -85,11 +86,11 @@ public class AIBrain {
             value = int.MaxValue;
             foreach (Node child in node.Children) {
                 value = Mathf.Min(value, MinMaxAlphaBeta(child, depth - 1, alpha, beta, true));
-                if (alpha >= value) return value + node.HeuristicValue;
+                if (alpha >= value) return value;
                 beta = Mathf.Min(beta, value);
             }
         }
-        return value + node.HeuristicValue * (isMax ? 1 : -1);
+        return value;
     }
     
     private int NegaMax(Node node, int depth, int color) {
@@ -100,7 +101,7 @@ public class AIBrain {
             int childValue = -NegaMax(child, depth - 1, -color);
             value = Mathf.Max(value, childValue);
         }
-        return color * node.HeuristicValue + value;
+        return color * value;
     } 
     
     private int NegaMaxAlphaBeta(Node node, int depth, int alpha, int beta, int color) {
@@ -112,7 +113,7 @@ public class AIBrain {
             alpha = Mathf.Max(alpha, value);
             if (alpha >= beta) break;
         }
-        return color * node.HeuristicValue + value;
+        return color * value;
     }
     
 }

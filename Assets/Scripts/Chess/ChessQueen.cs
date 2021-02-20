@@ -60,10 +60,6 @@ namespace Chess {
             return availableMoves;
         }
 
-        public override int MoveEvaluation(Board board, Coordinate destination) {
-            return board.GetPiece(destination)?.Value ?? 0;
-        }
-
         public override void ExecuteMove(Board board, Coordinate destination) {
             // Move to position
             board.Matrix[destination.Row, destination.Column] = board.Matrix[CurrentCoordinate.Row, CurrentCoordinate.Column];

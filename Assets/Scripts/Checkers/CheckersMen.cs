@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Checkers {
     public class CheckersMen : Piece {
@@ -43,16 +42,6 @@ namespace Checkers {
                 board.GetPiece(CurrentCoordinate.ToTopLeftJump) == null) 
                 availableMoves.Add(CurrentCoordinate.ToTopLeftJump); 
             return availableMoves;
-        }
-
-        public override int MoveEvaluation(Board board, Coordinate destination) {
-            // Normal Eat move
-            int xDistance = CurrentCoordinate.Row - destination.Row;
-            int yDistance = CurrentCoordinate.Column - destination.Column;
-            if (Mathf.Abs(xDistance) == 2 && Mathf.Abs(yDistance) == 2) {
-                return board.GetPiece(CurrentCoordinate + new Coordinate(xDistance, yDistance)).Value;
-            }
-            return 0;
         }
 
         public override void ExecuteMove(Board board, Coordinate destination) {
