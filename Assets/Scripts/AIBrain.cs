@@ -19,17 +19,32 @@ public class AIBrain {
         DepthSearch = depthSearch;
     }
 
-    public void Think() {
+    public void Think(Algorithm algorithm) {
         Nodes.Clear();
         float startingTime = Time.realtimeSinceStartup;
         foreach (Piece availablePiece in Board.AvailablePieces(Player)) {
             foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
                 Node node = new Node(Board, Player, Player, availablePiece.CurrentCoordinate, availableMove);
-                // int value = MinMax(node, DepthSearch, false);
-                // int value = MinMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, false);
-                // int value = NegaMax(node, DepthSearch, -1);
-                int value = NegaMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, -1);
-                // int value = NegaMaxAlphaBetaTranspositionTables(node, DepthSearch, int.MinValue, int.MaxValue, -1);
+                int value;
+                switch (algorithm) {
+                    case Algorithm.MinMax:
+                        value = MinMax(node, DepthSearch, false);
+                        break;
+                    case Algorithm.MinMaxAlphaBeta:
+                        value = MinMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, false);
+                        break;
+                    case Algorithm.NegaMax:
+                        value = NegaMax(node, DepthSearch, -1);
+                        break;
+                    case Algorithm.NegaMaxAlphaBeta:
+                        value = NegaMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, -1);
+                        break;
+                    case Algorithm.NegaMaxAlphaBetaWithTT:
+                        value = NegaMaxAlphaBetaTranspositionTables(node, DepthSearch, int.MinValue, int.MaxValue, -1);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(algorithm), algorithm, null);
+                }
                 Nodes.Add(new Tuple<int, Node>(value, node));
             }
         }
@@ -156,4 +171,12 @@ public class AIBrain {
         return value;
     }
 
+}
+
+public enum Algorithm {
+    MinMax,
+    MinMaxAlphaBeta,
+    NegaMax,
+    NegaMaxAlphaBeta,
+    NegaMaxAlphaBetaWithTT
 }

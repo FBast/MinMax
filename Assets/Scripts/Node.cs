@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Node {
 
@@ -12,23 +13,18 @@ public class Node {
         
     public PlayerColor OtherPlayerTurn => PlayerTurn == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
 
-    private List<Node> _children;
-    public List<Node> Children {
+    public IEnumerable<Node> Children {
         get {
-            if (_children == null) {
-                _children = new List<Node>();
-                foreach (Piece availablePiece in Board.AvailablePieces(OtherPlayerTurn)) {
-                    foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
-                        _children.Add(new Node(Board, PlayerEval, OtherPlayerTurn, availablePiece.CurrentCoordinate, availableMove));
-                    }
+            foreach (Piece availablePiece in Board.AvailablePieces(OtherPlayerTurn)) {
+                foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
+                    yield return new Node(Board, PlayerEval, OtherPlayerTurn, availablePiece.CurrentCoordinate, availableMove);
                 }
-            } 
-            return _children;
+            }
         }
     }
 
     public bool IsTerminal {
-        get { return Children.Count == 0; }
+        get { return !Children.Any(); }
     }
 
     public Node(Board board, PlayerColor playerEval, PlayerColor playerTurn, Coordinate moveOrigin, Coordinate moveDestination) {

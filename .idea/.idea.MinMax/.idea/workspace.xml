@@ -72,13 +72,13 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessKnight.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessQueen.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessRook.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Piece.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessBishop.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Node.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Board.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Chess/ChessPawn.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Node.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Piece.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Board.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/AIBrain.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
       </list>
     </option>
   </component>
@@ -99,12 +99,6 @@
       <path value="$PROJECT_DIR$/Library/PackageCache/com.unity.textmeshpro@3.0.1/package.json" />
       <path value="$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.3.6/package.json" />
     </packageJsonPaths>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="143" />
-    <option name="y" value="-14" />
-    <option name="width" value="1440" />
-    <option name="height" value="780" />
   </component>
   <component name="ProjectId" id="1oQOkrooliPA1smbGIduuHnJQEE" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -173,6 +167,10 @@
       <workItem from="1613821649942" duration="12549000" />
       <workItem from="1613848646931" duration="2536000" />
       <workItem from="1613851611220" duration="1169000" />
+      <workItem from="1613901828312" duration="96000" />
+      <workItem from="1613937874955" duration="2598000" />
+      <workItem from="1613941543955" duration="129000" />
+      <workItem from="1613941808804" duration="198000" />
     </task>
     <servers />
   </component>

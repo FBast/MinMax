@@ -4,10 +4,29 @@ using Checkers;
 using Chess;
 using JetBrains.Annotations;
 
-public class Board : ICloneable {
+public struct Board : ICloneable {
 
-    [ItemCanBeNull] public Piece[,] Matrix = new Piece[8, 8];
+    public int Row;
+    public int Column;
+    [ItemCanBeNull] public Piece[,] Matrix;
+    
+    public Board(int row, int column) {
+        Row = row;
+        Column = column;
+        Matrix = new Piece[Row, Column];
+    }
 
+    public Piece GetPiece(Coordinate coordinate) {
+        return Matrix[coordinate.Row, coordinate.Column];
+    }
+    
+    public IEnumerable<Piece> AvailablePieces(PlayerColor playerColor) {
+        foreach (Piece piece in Matrix) {
+            if (piece == null) continue;
+            if (piece.Player == playerColor) yield return piece;
+        }
+    }
+    
     public bool OccupiedCoordinate(Coordinate coordinate, PlayerColor? playerColor = null) {
         if (playerColor == null) return Matrix[coordinate.Row, coordinate.Column] != null;
         return Matrix[coordinate.Row, coordinate.Column]?.Player == playerColor;
@@ -17,9 +36,14 @@ public class Board : ICloneable {
         return coordinate.Row >= 0 && coordinate.Row < Matrix.GetLength(0) && 
                coordinate.Column >= 0 && coordinate.Column < Matrix.GetLength(1);
     }
-        
-    public Piece GetPiece(Coordinate coordinate) {
-        return Matrix[coordinate.Row, coordinate.Column];
+
+    public int Evaluate(PlayerColor playerColor) {
+        int value = 0;
+        foreach (Piece piece in Matrix) {
+            if (piece == null) continue;
+            value += piece.Value * (playerColor == piece.Player ? 1 : -1);
+        }
+        return value;
     }
 
     public void ConvertHandyMatrix(Pieces[,] handyMatrix) {
@@ -83,25 +107,9 @@ public class Board : ICloneable {
             }
         }
     }
-
-    public int Evaluate(PlayerColor playerColor) {
-        int value = 0;
-        foreach (Piece piece in Matrix) {
-            if (piece == null) continue;
-            value += piece.Value * (playerColor == piece.Player ? 1 : -1);
-        }
-        return value;
-    }
     
-    public IEnumerable<Piece> AvailablePieces(PlayerColor playerColor) {
-        foreach (Piece piece in Matrix) {
-            if (piece == null) continue;
-            if (piece.Player == playerColor) yield return piece;
-        }
-    }
-        
     public object Clone() {
-        Board board = new Board();
+        Board board = new Board(Row, Column);
         for (int i = 0; i < Matrix.GetLength(0); i++) {
             for (int j = 0; j < Matrix.GetLength(1); j++) {
                 board.Matrix[i, j] = (Piece) Matrix[i, j]?.Clone();

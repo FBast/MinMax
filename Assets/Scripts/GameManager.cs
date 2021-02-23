@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Checkers;
 using Chess;
 using Sirenix.OdinInspector;
@@ -9,10 +7,11 @@ using UnityEngine;
 
 public class GameManager : SerializedMonoBehaviour {
 
-    [Header("Parameters")]
+    [Header("Parameters")] 
+    public Algorithm Algorithm;
     public bool AutoPlay;
     public bool UseTestingBoard;
-    public int Depth;
+    [Range(1, 4)] public int Depth;
     
     [Header("Camera")] 
     public GameObject CameraPivot;
@@ -46,7 +45,7 @@ public class GameManager : SerializedMonoBehaviour {
     [TableMatrix(HorizontalTitle = "ChessBoard")] public Pieces[,] ChessBoard = new Pieces[8,8];
     [TableMatrix(HorizontalTitle = "TestingBoard")] public Pieces[,] TestingBoard = new Pieces[8,8];
 
-    private readonly Board _board = new Board();
+    private Board _board;
     private Transform[,] _physicalMatrix;
     private readonly Queue<AIBrain> _inQueueBrains = new Queue<AIBrain>();
     private AIBrain _currentPlayer;
@@ -54,6 +53,7 @@ public class GameManager : SerializedMonoBehaviour {
 
     private void Awake() {
         GeneratePositionMatrix();
+        _board = new Board(8, 8);
         _board.ConvertHandyMatrix(UseTestingBoard ? TestingBoard : ChessBoard);
         CreateAI();
         UpdatePhysicalBoard(_board);
@@ -61,7 +61,13 @@ public class GameManager : SerializedMonoBehaviour {
 
     private void Update() {
         if ((Input.GetButtonUp("Jump") || AutoPlay) && !_isPlaying) {
-            StartCoroutine(nameof(Play));
+            _isPlaying = true;
+            _currentPlayer.Think(Algorithm);
+            _currentPlayer.Act();
+            UpdatePhysicalBoard(_board);
+            _inQueueBrains.Enqueue(_currentPlayer);
+            _currentPlayer = _inQueueBrains.Dequeue();
+            Invoke(nameof(RotateCamera), TimeBeforeRotation);
         }
     }
 
@@ -77,16 +83,6 @@ public class GameManager : SerializedMonoBehaviour {
     public void CreateAI() {
         _currentPlayer = new AIBrain(_board, PlayerColor.White, Depth);
         _inQueueBrains.Enqueue(new AIBrain(_board, PlayerColor.Black, Depth));
-    }
-    
-    private void Play() {
-        _isPlaying = true;
-        _currentPlayer.Think();
-        _currentPlayer.Act();
-        UpdatePhysicalBoard(_board);
-        _inQueueBrains.Enqueue(_currentPlayer);
-        _currentPlayer = _inQueueBrains.Dequeue();
-        Invoke(nameof(RotateCamera), TimeBeforeRotation);
     }
 
     private void RotateCamera() {
