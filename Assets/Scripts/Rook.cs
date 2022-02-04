@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Chess {
-    public class ChessRook : Piece {
+    public class Rook : Piece {
         
-        public ChessRook(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
+        public Rook(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
         
         public override int Value => 5;
 
-        public override List<Coordinate> AvailableMoves(Board board) {
+        public override IEnumerable<Coordinate> BaseMoves(Board board) {
             List<Coordinate> availableMoves = new List<Coordinate>();
             // Moves to the right
             for (Coordinate coordinate = CurrentCoordinate.ToRight; board.ValidCoordinate(coordinate); coordinate += Coordinate.Right) {
@@ -44,7 +45,7 @@ namespace Chess {
         }
 
         public override object Clone() {
-            return new ChessRook(CurrentCoordinate, Player);
+            return new Rook(CurrentCoordinate, Player);
         }
 
     }

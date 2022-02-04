@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Chess {
-    public class ChessKing : Piece {
+    public class King : Piece {
         
-        public ChessKing(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
+        public King(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
         
         public override int Value => 10;
 
-        public override List<Coordinate> AvailableMoves(Board board) {
+        public override IEnumerable<Coordinate> BaseMoves(Board board) {
             List<Coordinate> availableMoves = new List<Coordinate>();
             // Moves to the right
             if (board.ValidCoordinate(CurrentCoordinate.ToRight) && !board.OccupiedCoordinate(CurrentCoordinate.ToRight, Player)) 
@@ -35,7 +36,7 @@ namespace Chess {
                 availableMoves.Add(CurrentCoordinate.ToTopLeft);
             return availableMoves;
         }
-
+        
         public override void ExecuteMove(Board board, Coordinate destination) {
             // Move to position
             board.Matrix[destination.Row, destination.Column] = board.Matrix[CurrentCoordinate.Row, CurrentCoordinate.Column];
@@ -44,9 +45,8 @@ namespace Chess {
         }
 
         public override object Clone() {
-            return new ChessKing(CurrentCoordinate, Player);
+            return new King(CurrentCoordinate, Player);
         }
-
 
     }
 }

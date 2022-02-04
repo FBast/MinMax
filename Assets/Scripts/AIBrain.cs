@@ -7,56 +7,56 @@ using Random = UnityEngine.Random;
 
 public class AIBrain {
 
-    public Board Board;
-    public PlayerColor Player;
-    public int DepthSearch;
+    private Board _board;
+    private readonly PlayerColor _player;
+    private readonly int _depthSearch;
     
-    private List<Tuple<int, Node>> Nodes = new List<Tuple<int, Node>>();
+    private readonly List<Tuple<int, Node>> _tree = new List<Tuple<int, Node>>();
 
     public AIBrain(Board board, PlayerColor player, int depthSearch) {
-        Board = board;
-        Player = player;
-        DepthSearch = depthSearch;
+        _board = board;
+        _player = player;
+        _depthSearch = depthSearch;
     }
 
     public void Think(Algorithm algorithm) {
-        Nodes.Clear();
+        _tree.Clear();
         float startingTime = Time.realtimeSinceStartup;
-        foreach (Piece availablePiece in Board.AvailablePieces(Player)) {
-            foreach (Coordinate availableMove in availablePiece.AvailableMoves(Board)) {
-                Node node = new Node(Board, Player, Player, availablePiece.CurrentCoordinate, availableMove);
+        foreach (Piece availablePiece in _board.GetPieces(_player)) {
+            foreach (Coordinate availableMove in availablePiece.BaseMoves(_board)) {
+                Node node = new Node(_board, _player, _player, availablePiece.CurrentCoordinate, availableMove);
                 int value;
                 switch (algorithm) {
                     case Algorithm.MinMax:
-                        value = MinMax(node, DepthSearch, false);
+                        value = MinMax(node, _depthSearch, false);
                         break;
                     case Algorithm.MinMaxAlphaBeta:
-                        value = MinMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, false);
+                        value = MinMaxAlphaBeta(node, _depthSearch, int.MinValue, int.MaxValue, false);
                         break;
                     case Algorithm.NegaMax:
-                        value = NegaMax(node, DepthSearch, -1);
+                        value = NegaMax(node, _depthSearch, -1);
                         break;
                     case Algorithm.NegaMaxAlphaBeta:
-                        value = NegaMaxAlphaBeta(node, DepthSearch, int.MinValue, int.MaxValue, -1);
+                        value = NegaMaxAlphaBeta(node, _depthSearch, int.MinValue, int.MaxValue, -1);
                         break;
                     case Algorithm.NegaMaxAlphaBetaWithTT:
-                        value = NegaMaxAlphaBetaTranspositionTables(node, DepthSearch, int.MinValue, int.MaxValue, -1);
+                        value = NegaMaxAlphaBetaTranspositionTables(node, _depthSearch, int.MinValue, int.MaxValue, -1);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(algorithm), algorithm, null);
                 }
-                Nodes.Add(new Tuple<int, Node>(value, node));
+                _tree.Add(new Tuple<int, Node>(value, node));
             }
         }
         Debug.Log("Reflexion took about : " + (Time.realtimeSinceStartup - startingTime) + " seconds");
     }
     
     public void Act() {
-        if (Nodes.Count == 0) throw new Exception("MinMax results is empty");
-        int bestValue = Nodes.Max(node => node.Item1);
-        Nodes.RemoveAll(node => node.Item1 < bestValue);
-        Tuple<int, Node> selectedTuple = Nodes[Random.Range(0, Nodes.Count)];
-        Board.GetPiece(selectedTuple.Item2.MoveOrigin).ExecuteMove(Board, selectedTuple.Item2.MoveDestination);
+        if (_tree.Count == 0) throw new Exception("The tree is empty");
+        int bestValue = _tree.Max(node => node.Item1);
+        _tree.RemoveAll(node => node.Item1 < bestValue);
+        Tuple<int, Node> selectedTuple = _tree[Random.Range(0, _tree.Count)];
+        _board.GetPiece(selectedTuple.Item2.MoveOrigin).ExecuteMove(_board, selectedTuple.Item2.MoveDestination);
     }
         
     private int MinMax(Node node, int depth, bool isMax) {
@@ -78,8 +78,7 @@ public class AIBrain {
         }
         return value;
     }
-
-    // int result = AlphaBetaMinMax(node, Depth, int.MinValue, int.MaxValue, false);
+    
     private int MinMaxAlphaBeta(Node node, int depth, int alpha, int beta, bool isMax) {
         if (depth == 0 || node.IsTerminal)
             return node.HeuristicValue;

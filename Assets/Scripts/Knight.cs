@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
 namespace Chess {
-    public class ChessKnight : Piece {
+    public class Knight : Piece {
         
-        public ChessKnight(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
+        public Knight(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
 
         public override int Value => 3;
 
-        public override List<Coordinate> AvailableMoves(Board board) {
+        public override IEnumerable<Coordinate> BaseMoves(Board board) {
             List<Coordinate> possibleMoves = new List<Coordinate> {
                 CurrentCoordinate + Coordinate.Right + Coordinate.Top * 2,
                 CurrentCoordinate + Coordinate.Right * 2 + Coordinate.Top,
@@ -35,7 +35,7 @@ namespace Chess {
         }
 
         public override object Clone() {
-            return new ChessKnight(CurrentCoordinate, Player);
+            return new Knight(CurrentCoordinate, Player);
         }
 
 

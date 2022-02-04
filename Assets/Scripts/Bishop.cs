@@ -1,38 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Chess {
-    public class ChessQueen : Piece {
+    public class Bishop : Piece {
         
-        public ChessQueen(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
+        public Bishop(Coordinate currentCoordinate, PlayerColor player) : base(currentCoordinate, player) { }
         
-        public override int Value => 10;
-
-        public override List<Coordinate> AvailableMoves(Board board) {
+        public override int Value => 3;
+        
+        public override IEnumerable<Coordinate> BaseMoves(Board board) {
             List<Coordinate> availableMoves = new List<Coordinate>();
-            // Moves to the right
-            for (Coordinate coordinate = CurrentCoordinate.ToRight; board.ValidCoordinate(coordinate); coordinate += Coordinate.Right) {
-                if (board.OccupiedCoordinate(coordinate, Player)) break;
-                availableMoves.Add(coordinate);
-                if (board.OccupiedCoordinate(coordinate)) break;
-            }
-            // Moves to the left
-            for (Coordinate coordinate = CurrentCoordinate.ToLeft; board.ValidCoordinate(coordinate); coordinate += Coordinate.Right) {
-                if (board.OccupiedCoordinate(coordinate, Player)) break;
-                availableMoves.Add(coordinate);
-                if (board.OccupiedCoordinate(coordinate)) break;
-            }
-            // Moves to the top
-            for (Coordinate coordinate = CurrentCoordinate.ToTop; board.ValidCoordinate(coordinate); coordinate += Coordinate.Top) {
-                if (board.OccupiedCoordinate(coordinate, Player)) break;
-                availableMoves.Add(coordinate);
-                if (board.OccupiedCoordinate(coordinate)) break;
-            }
-            // Moves to the bottom
-            for (Coordinate coordinate = CurrentCoordinate.ToBottom; board.ValidCoordinate(coordinate); coordinate += Coordinate.Bottom) {
-                if (board.OccupiedCoordinate(coordinate, Player)) break;
-                availableMoves.Add(coordinate);
-                if (board.OccupiedCoordinate(coordinate)) break;
-            }
             // Moves to the topRight
             for (Coordinate coordinate = CurrentCoordinate.ToTopRight; board.ValidCoordinate(coordinate); coordinate += Coordinate.TopRight) {
                 if (board.OccupiedCoordinate(coordinate, Player)) break;
@@ -68,9 +45,8 @@ namespace Chess {
         }
 
         public override object Clone() {
-            return new ChessQueen(CurrentCoordinate, Player);
+            return new Bishop(CurrentCoordinate, Player);
         }
-
 
     }
 }

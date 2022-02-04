@@ -1,7 +1,7 @@
-﻿public struct Coordinate {
+﻿public readonly struct Coordinate {
 
-    public int Row;
-    public int Column;
+    public readonly int Row;
+    public readonly int Column;
 
     public static Coordinate Zero => new Coordinate(0, 0);
     public static Coordinate Top => new Coordinate(1, 0);
@@ -37,21 +37,31 @@
     }
 
     public static Coordinate operator +(Coordinate a) => a;
-    
     public static Coordinate operator -(Coordinate a) => new Coordinate(-a.Row, -a.Column);
-
     public static Coordinate operator +(Coordinate a, Coordinate b) => new Coordinate(a.Row + b.Row, a.Column + b.Column);
-
     public static Coordinate operator -(Coordinate a, Coordinate b) => new Coordinate(a.Row - b.Row, a.Column - b.Column);
-
     public static Coordinate operator *(Coordinate a, int b) => new Coordinate(a.Row * b, a.Column * b);
-    
     public static Coordinate operator *(Coordinate a, Coordinate b) => new Coordinate(a.Row * b.Row, a.Column * b.Column);
-
     public static Coordinate operator /(Coordinate a, Coordinate b) => new Coordinate(a.Row / b.Row, a.Column / b.Column);
+    public static bool operator ==(Coordinate a, Coordinate b) => a.Equals(b);
+    public static bool operator !=(Coordinate a, Coordinate b) => !a.Equals(b);
     
     public override string ToString() {
         return "Coordinate : " + Row + " " + Column;
     }
-        
+
+    public bool Equals(Coordinate other) {
+        return Row == other.Row && Column == other.Column;
+    }
+
+    public override bool Equals(object obj) {
+        return obj is Coordinate other && Equals(other);
+    }
+
+    public override int GetHashCode() {
+        unchecked {
+            return (Row * 397) ^ Column;
+        }
+    }
+
 }

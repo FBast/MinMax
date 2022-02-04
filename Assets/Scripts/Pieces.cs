@@ -11,9 +11,5 @@
     WhiteChessQueen,
     BlackChessQueen,
     WhiteChessKing,
-    BlackChessKing,
-    WhiteCheckersMen,
-    BlackCheckersMen,
-    WhiteCheckersKing,
-    BlackCheckersKing
+    BlackChessKing
 }

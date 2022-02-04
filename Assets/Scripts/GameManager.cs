@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Checkers;
 using Chess;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -11,17 +10,11 @@ public class GameManager : SerializedMonoBehaviour {
     public Algorithm Algorithm;
     public bool AutoPlay;
     public bool UseTestingBoard;
-    [Range(1, 4)] public int Depth;
+    [Range(0, 4)] public int Depth;
     
     [Header("Camera")] 
     public GameObject CameraPivot;
     public float TimeBeforeRotation;
-    
-    [Header("Checkers")]
-    public GameObject CheckersWhiteMenPrefab;
-    public GameObject CheckersWhiteKingPrefab;
-    public GameObject CheckersBlackMenPrefab;
-    public GameObject CheckersBlackKingPrefab;
 
     [Header("Chess")] 
     public GameObject ChessWhitePawnPrefab;
@@ -107,21 +100,17 @@ public class GameManager : SerializedMonoBehaviour {
 
     private GameObject GetPhysicalPiece(Piece piece, PlayerColor playerColor) {
         switch (piece) {
-            case CheckersMen _ :
-                return playerColor == PlayerColor.White ? CheckersWhiteMenPrefab : CheckersBlackMenPrefab;
-            case CheckersKing _ :
-                return playerColor == PlayerColor.White ? CheckersWhiteKingPrefab : CheckersBlackKingPrefab;
-            case ChessPawn _ :
+            case Pawn _ :
                 return playerColor == PlayerColor.White ? ChessWhitePawnPrefab : ChessBlackPawnPrefab;
-            case ChessKnight _ :
+            case Knight _ :
                 return playerColor == PlayerColor.White ? ChessWhiteKnightPrefab : ChessBlackKnightPrefab;
-            case ChessRook _ :
+            case Rook _ :
                 return playerColor == PlayerColor.White ? ChessWhiteRookPrefab : ChessBlackRookPrefab;
-            case ChessBishop _ :
+            case Bishop _ :
                 return playerColor == PlayerColor.White ? ChessWhiteBishopPrefab : ChessBlackBishopPrefab;
-            case ChessQueen _ :
+            case Queen _ :
                 return playerColor == PlayerColor.White ? ChessWhiteQueenPrefab : ChessBlackQueenPrefab;
-            case ChessKing _ :
+            case King _ :
                 return playerColor == PlayerColor.White ? ChessWhiteKingPrefab : ChessBlackKingPrefab;
             default:
                 throw new Exception("Unknown piece type : " + piece.GetType());
