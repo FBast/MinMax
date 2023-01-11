@@ -10,13 +10,15 @@ public class AIBrain {
     private Board _board;
     private readonly PlayerColor _player;
     private readonly int _depthSearch;
+    private Algorithm _algorithm;
     
     private readonly List<Tuple<int, Node>> _tree = new List<Tuple<int, Node>>();
 
-    public AIBrain(Board board, PlayerColor player, int depthSearch) {
+    public AIBrain(Board board, PlayerColor player, int depthSearch, Algorithm algorithm) {
         _board = board;
         _player = player;
         _depthSearch = depthSearch;
+        _algorithm = algorithm;
     }
 
     public void Think(Algorithm algorithm) {
@@ -46,6 +48,7 @@ public class AIBrain {
                         throw new ArgumentOutOfRangeException(nameof(algorithm), algorithm, null);
                 }
                 _tree.Add(new Tuple<int, Node>(value, node));
+                Debug.Log("Thinking...");
             }
         }
         Debug.Log("Reflexion took about : " + (Time.realtimeSinceStartup - startingTime) + " seconds");

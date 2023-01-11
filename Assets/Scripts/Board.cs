@@ -29,8 +29,7 @@ public struct Board : ICloneable {
     
     public IEnumerable<T> GetPieces<T>(PlayerColor? playerColor = null) where T : Piece {
         foreach (Piece piece in Matrix) {
-            T castedPiece = piece as T;
-            if (castedPiece == null) continue;
+            if (piece is not T castedPiece) continue;
             if (playerColor == null) yield return castedPiece;
             if (castedPiece.Player == playerColor) yield return castedPiece;
         }
@@ -39,7 +38,7 @@ public struct Board : ICloneable {
     public bool OccupiedCoordinate(Coordinate coordinate, PlayerColor? playerColor = null) {
         Piece piece = Matrix[coordinate.Row, coordinate.Column];
         if (playerColor == null) return piece != null;
-        return piece?.Player == playerColor;
+        return piece is King || piece?.Player == playerColor;
     }
     
     public bool ValidCoordinate(Coordinate coordinate) {
@@ -57,7 +56,7 @@ public struct Board : ICloneable {
                 if (piece == null) continue;
                 value += piece.Value * (player == piece.Player ? 1 : -1);
             }
-            value += ChessRules.Check(this, player, opponent) ? -5 : 0;
+            //value += ChessRules.Check(this, player, opponent) ? -5 : 0;
             value += ChessRules.Draw(this, player) ? -10 : 0;
         }
         return value;

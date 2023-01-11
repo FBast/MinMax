@@ -10,7 +10,7 @@ public class Pawn : Piece {
 
     public override IEnumerable<Coordinate> BaseMoves(Board board) {
         List<Coordinate> availableMoves = new List<Coordinate>();
-        if (Player == PlayerColor.White) {
+        if (Player == PlayerColor.Black) {
             if (!_hasMoved && board.ValidCoordinate(CurrentCoordinate.ToTopJump) && !board.OccupiedCoordinate(CurrentCoordinate.ToTopJump) && 
                 !board.OccupiedCoordinate(CurrentCoordinate.ToTop))
                 availableMoves.Add(CurrentCoordinate.ToTopJump);
@@ -21,7 +21,7 @@ public class Pawn : Piece {
             if (board.ValidCoordinate(CurrentCoordinate.ToTopLeft) && board.OccupiedCoordinate(CurrentCoordinate.ToTopLeft, OtherPlayer)) 
                 availableMoves.Add(CurrentCoordinate.ToTopLeft);
         }
-        if (Player == PlayerColor.Black) {
+        if (Player == PlayerColor.White) {
             if (!_hasMoved && board.ValidCoordinate(CurrentCoordinate.ToBottomJump) && !board.OccupiedCoordinate(CurrentCoordinate.ToBottomJump) &&
                 !board.OccupiedCoordinate(CurrentCoordinate.ToBottom)) 
                 availableMoves.Add(CurrentCoordinate.ToBottomJump);
