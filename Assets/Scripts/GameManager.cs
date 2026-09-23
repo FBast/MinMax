@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using Checkers;
 using Chess;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class GameManager : SerializedMonoBehaviour {
+public class GameManager : MonoBehaviour {
 
     [Header("Parameters")] 
     public Algorithm Algorithm;
@@ -42,8 +41,8 @@ public class GameManager : SerializedMonoBehaviour {
     public Transform PiecesContent;
 
     [Header("Matrix")]
-    [TableMatrix(HorizontalTitle = "ChessBoard")] public Pieces[,] ChessBoard = new Pieces[8,8];
-    [TableMatrix(HorizontalTitle = "TestingBoard")] public Pieces[,] TestingBoard = new Pieces[8,8];
+    public Pieces[,] ChessBoard = new Pieces[8,8];
+    public Pieces[,] TestingBoard = new Pieces[8,8];
 
     private Board _board;
     private Transform[,] _physicalMatrix;
