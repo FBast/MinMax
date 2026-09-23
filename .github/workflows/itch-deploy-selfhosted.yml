@@ -49,7 +49,8 @@ jobs:
 
           New-Item -ItemType Directory -Force -Path dist | Out-Null
           $zip = "dist/$($asset.name)"
-          Invoke-WebRequest -Uri $asset.url -Headers ($headers + @{ Accept = "application/octet-stream" }) -OutFile $zip
+          $dl = @{ Authorization = $headers.Authorization; Accept = "application/octet-stream" }
+          Invoke-WebRequest -Uri $asset.url -Headers $dl -OutFile $zip
 
           # Canal itch déduit de la plateforme présente dans le nom du zip
           $channel = switch -Wildcard ($asset.name) {
